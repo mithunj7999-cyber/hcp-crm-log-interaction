@@ -1,10 +1,14 @@
-# Environment
-.env
+# Node
+node_modules/
+frontend/node_modules/
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
 
-# Virtual Environment
+# Env
+.env
 venv/
 .venv/
 env/

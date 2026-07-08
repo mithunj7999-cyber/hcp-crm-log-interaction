@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
-from app.api import hcps, interactions, materials
+from app.api import hcps, interactions, materials, chat
 
 settings = get_settings()
 
@@ -29,6 +29,7 @@ app.add_middleware(
 app.include_router(hcps.router,         prefix="/api")
 app.include_router(interactions.router,  prefix="/api")
 app.include_router(materials.router,     prefix="/api")
+app.include_router(chat.router,          prefix="/api")
 
 
 # ── Health Check ────────────────────────────────────────────────────────
