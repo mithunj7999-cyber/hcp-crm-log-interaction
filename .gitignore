@@ -20,3 +20,8 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local databases and build output
+*.db
+backend/hcp_crm.db
+frontend/dist/

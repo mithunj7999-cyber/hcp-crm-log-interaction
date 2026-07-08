@@ -87,7 +87,7 @@ export default function LeftPanelForm() {
 
   // Find current HCP name to show in the input box
   const selectedHcp = hcps.find(h => h.id === Number(form.hcp_id)) || null;
-  const hcpInputDisplay = selectedHcp ? selectedHcp.name : hcpSearch;
+  const hcpInputDisplay = form.hcp_name || (selectedHcp ? selectedHcp.name : hcpSearch);
 
   const handleFieldChange = (field, value) => {
     dispatch(updateFormField({ field, value }));
@@ -95,6 +95,7 @@ export default function LeftPanelForm() {
 
   const handleSelectHcp = (hcp) => {
     handleFieldChange('hcp_id', hcp.id);
+    handleFieldChange('hcp_name', hcp.name);
     setHcpSearch(hcp.name);
     setShowHcpDropdown(false);
   };
@@ -181,7 +182,9 @@ export default function LeftPanelForm() {
                   placeholder="Type to search HCP..."
                   value={hcpInputDisplay}
                   onChange={(e) => {
-                    setHcpSearch(e.target.value);
+                    const nextValue = e.target.value;
+                    setHcpSearch(nextValue);
+                    handleFieldChange('hcp_name', nextValue);
                     if (form.hcp_id) handleFieldChange('hcp_id', '');
                     setShowHcpDropdown(true);
                   }}

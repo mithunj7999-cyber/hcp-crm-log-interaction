@@ -6,20 +6,19 @@ AI-First Healthcare CRM backend built with **FastAPI**, **SQLAlchemy**, **Alembi
 
 ### 1. Prerequisites
 - Python 3.11+
-- PostgreSQL running locally
 
-### 2. Create the database
-
-```sql
-CREATE DATABASE hcp_crm;
-```
-
-### 3. Configure environment
+### 2. Configure environment
 
 ```bash
 cd backend
 cp .env.example .env
-# Edit .env with your actual Postgres credentials & Groq API key
+# Update `.env` to set your database connection string and Groq API key
+```
+
+Note: This project defaults the `DATABASE_URL` to a MySQL DSN placeholder. Edit `.env` and set `DATABASE_URL` to your MySQL connection string. Example MySQL DSN:
+
+```bash
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/hcp_crm?charset=utf8mb4
 ```
 
 ### 4. Install dependencies

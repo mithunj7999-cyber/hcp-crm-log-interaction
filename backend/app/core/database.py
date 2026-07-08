@@ -9,11 +9,14 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
+connect_args = {}
+if settings.DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
 engine = create_engine(
     settings.DATABASE_URL,
+    connect_args=connect_args,
     pool_pre_ping=True,       # verify connections before checkout
-    pool_size=10,
-    max_overflow=20,
     echo=settings.APP_DEBUG,  # SQL logging in dev mode
 )
 

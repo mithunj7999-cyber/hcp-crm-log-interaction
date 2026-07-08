@@ -5,8 +5,8 @@ import { Bot, Send, User } from 'lucide-react';
 
 export default function RightPanelChat() {
   const dispatch = useDispatch();
-  const chatMessages = useSelector((state) => state.hcp.chatMessages);
-  const loadingChat = useSelector((state) => state.hcp.loadingChat);
+  const chatMessages = useSelector((state) => Array.isArray(state.hcp?.chatMessages) ? state.hcp.chatMessages : []);
+  const loadingChat = useSelector((state) => state.hcp?.loadingChat ?? false);
   const [input, setInput] = useState('');
   
   const bottomRef = useRef(null);
@@ -65,7 +65,7 @@ export default function RightPanelChat() {
                   </>
                 )}
               </div>
-              <p style={{ whiteSpace: 'pre-line' }}>{m.content}</p>
+              <p style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', margin: 0 }}>{m.content}</p>
             </div>
           ))}
           

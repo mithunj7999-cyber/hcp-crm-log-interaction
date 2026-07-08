@@ -5,8 +5,8 @@ python-multipart>=0.0.9
 
 # Database
 sqlalchemy>=2.0.35
-psycopg2-binary>=2.9.9
 alembic>=1.13.2
+pymysql>=1.0.2
 
 # Environment
 python-dotenv>=1.0.1

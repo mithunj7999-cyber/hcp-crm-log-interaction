@@ -84,13 +84,19 @@ def log_interaction(
     """
     db = _get_db()
     try:
-        # Resolve HCP by name (fuzzy match)
-        hcp = db.query(HCP).filter(HCP.name.ilike(f"%{hcp_name}%")).first()
-        if not hcp:
+        # Resolve HCP by name (fuzzy match); create a new one if it does not exist.
+        hcp_name = (hcp_name or "").strip()
+        if not hcp_name:
             return json.dumps({
-                "error": f"HCP '{hcp_name}' not found in the database. Please check the name and try again.",
+                "error": "HCP name is required to log an interaction.",
                 "success": False,
             })
+
+        hcp = db.query(HCP).filter(HCP.name.ilike(f"%{hcp_name}%")) .first()
+        if not hcp:
+            hcp = HCP(name=hcp_name)
+            db.add(hcp)
+            db.flush()
 
         # Parse interaction type
         type_map = {v.value.lower(): v for v in InteractionType}
@@ -150,7 +156,7 @@ def log_interaction(
 
 @tool
 def edit_interaction(
-    interaction_id: int,
+    interaction_id: int | str,
     field: str,
     new_value: str,
 ) -> str:
@@ -168,6 +174,11 @@ def edit_interaction(
     """
     db = _get_db()
     try:
+        try:
+            interaction_id = int(interaction_id)
+        except (TypeError, ValueError):
+            return json.dumps({"error": f"Invalid interaction ID: {interaction_id}", "success": False})
+
         interaction = db.query(Interaction).filter(Interaction.id == interaction_id).first()
         if not interaction:
             return json.dumps({
@@ -238,7 +249,7 @@ def edit_interaction(
 # ═══════════════════════════════════════════════════════════════════════
 
 @tool
-def suggest_followups(interaction_id: int) -> str:
+def suggest_followups(interaction_id: int | str) -> str:
     """Generate follow-up action suggestions for a logged interaction.
 
     Retrieves the interaction details and returns context so the LLM can
@@ -249,6 +260,11 @@ def suggest_followups(interaction_id: int) -> str:
     """
     db = _get_db()
     try:
+        try:
+            interaction_id = int(interaction_id)
+        except (TypeError, ValueError):
+            return json.dumps({"error": f"Invalid interaction ID: {interaction_id}", "success": False})
+
         interaction = db.query(Interaction).filter(Interaction.id == interaction_id).first()
         if not interaction:
             return json.dumps({"error": f"Interaction #{interaction_id} not found.", "success": False})

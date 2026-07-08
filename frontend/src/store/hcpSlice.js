@@ -74,6 +74,7 @@ export const saveInteraction = createAsyncThunk(
 
 const initialFormState = {
   hcp_id: '',
+  hcp_name: '',
   interaction_type: 'Meeting',
   date: new Date().toISOString().split('T')[0],
   time: '',

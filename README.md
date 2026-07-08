@@ -149,11 +149,11 @@ Create a `.env` file in the backend directory (and frontend if applicable). Exam
 
 ```
 # Backend
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/hcp_crm?charset=utf8mb4
 SECRET_KEY=change-me
 FLASK_ENV=development
 PORT=5000
-
+```
 # Third-party services
 CRM_API_KEY=your_crm_api_key
 CRM_API_URL=https://api.crm.example

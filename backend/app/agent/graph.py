@@ -41,7 +41,7 @@ Your primary responsibilities:
 
 IMPORTANT RULES:
 - Always try to extract as much information as possible from the user's message.
-- If the HCP name is mentioned, always use it to search the database.
+- If the HCP name is mentioned, always use it to search the database; if it does not exist yet, create a new HCP record automatically.
 - For sentiment, infer from context clues: words like "interested", "excited", "agreed" → Positive; "hesitant", "declined", "concerned" → Negative; otherwise → Neutral.
 - After logging, always call `suggest_followups` with the new interaction ID.
 - Present follow-up suggestions as a numbered list.
@@ -64,7 +64,7 @@ def _build_llm() -> ChatGroq:
     """Create the primary Groq LLM with tool-binding."""
     primary = ChatGroq(
         api_key=settings.GROQ_API_KEY,
-        model_name="gemma2-9b-it",
+        model_name=settings.GROQ_MODEL,
         temperature=0.3,
         max_tokens=2048,
     )
@@ -75,7 +75,7 @@ def _build_fallback_llm() -> ChatGroq:
     """Create the fallback Groq LLM."""
     return ChatGroq(
         api_key=settings.GROQ_API_KEY,
-        model_name="llama-3.3-70b-versatile",
+        model_name=settings.GROQ_FALLBACK_MODEL,
         temperature=0.3,
         max_tokens=2048,
     )
@@ -96,7 +96,7 @@ def agent_node(state: AgentState) -> dict:
         llm = _build_llm().bind_tools(ALL_TOOLS)
         response = llm.invoke(messages)
     except Exception as e:
-        logger.warning(f"Primary model (gemma2-9b-it) failed: {e}. Falling back to llama-3.3-70b-versatile.")
+        logger.warning(f"Primary model ({settings.GROQ_MODEL}) failed: {e}. Falling back to {settings.GROQ_FALLBACK_MODEL}.")
         try:
             llm = _build_fallback_llm().bind_tools(ALL_TOOLS)
             response = llm.invoke(messages)
