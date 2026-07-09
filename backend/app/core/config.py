@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     # ── Groq LLM ───────────────────────────────────────────────────────
     GROQ_API_KEY: str = ""
     # Primary Groq model and optional fallback
-    GROQ_MODEL: str = "llama-3.3-70b-versatile"
-    GROQ_FALLBACK_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_FALLBACK_MODEL: str = "llama-3.3-70b-versatile"
 
     # ── App ─────────────────────────────────────────────────────────────
     APP_ENV: str = "development"

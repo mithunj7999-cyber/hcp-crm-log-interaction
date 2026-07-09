@@ -2,7 +2,7 @@
 HCP CRM — LangGraph Agent Graph.
 
 Builds a ReAct-style agent using LangGraph that routes user messages
-through Groq LLM (gemma2-9b-it primary, llama-3.3-70b-versatile fallback)
+through Groq LLM (llama-3.1-8b-instant primary, llama-3.3-70b-versatile fallback)
 and can invoke the 5 HCP tools.
 """
 
@@ -64,7 +64,7 @@ def _build_llm() -> ChatGroq:
     """Create the primary Groq LLM with tool-binding."""
     primary = ChatGroq(
         api_key=settings.GROQ_API_KEY,
-        model_name=settings.GROQ_MODEL,
+        model=settings.GROQ_MODEL,
         temperature=0.3,
         max_tokens=2048,
     )
@@ -75,7 +75,7 @@ def _build_fallback_llm() -> ChatGroq:
     """Create the fallback Groq LLM."""
     return ChatGroq(
         api_key=settings.GROQ_API_KEY,
-        model_name=settings.GROQ_FALLBACK_MODEL,
+        model=settings.GROQ_FALLBACK_MODEL,
         temperature=0.3,
         max_tokens=2048,
     )
@@ -103,8 +103,9 @@ def agent_node(state: AgentState) -> dict:
         except Exception as fallback_err:
             logger.error(f"Fallback model also failed: {fallback_err}")
             response = AIMessage(
-                content="I'm sorry, I'm having trouble processing your request right now. "
-                        "Please try again in a moment."
+                content="I'm sorry, the AI service is temporarily unavailable. "
+                        "The configured Groq model may be rate-limited or unavailable right now. "
+                        "Please try again in a few minutes."
             )
 
     return {"messages": [response]}
