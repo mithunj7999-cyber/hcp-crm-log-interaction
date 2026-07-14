@@ -7,6 +7,8 @@ from sqlalchemy.orm import sessionmaker
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import app.compat.patches  # noqa: F401 — patch blocked native deps before langchain loads
+
 from app.agent import graph, tools
 from app.core.database import Base
 from app.models.models import HCP

@@ -10,8 +10,6 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from app.agent.graph import run_agent
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["AI Chat"])
@@ -59,6 +57,8 @@ async def chat(request: ChatRequest):
     - Return a reply + any extracted structured data + follow-up suggestions
     """
     try:
+        from app.agent.graph import run_agent
+
         # Convert history to list of dicts
         history = None
         if request.history:

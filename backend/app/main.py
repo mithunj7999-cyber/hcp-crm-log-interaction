@@ -2,6 +2,8 @@
 HCP CRM Backend — FastAPI Application Entry Point.
 """
 
+import app.compat.patches  # noqa: F401 — patch blocked native deps before langchain loads
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
