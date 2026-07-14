@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
+from app.core.database import Base, engine
 from app.api import hcps, interactions, materials, chat
 
 settings = get_settings()
@@ -16,6 +17,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
+Base.metadata.create_all(bind=engine)
 # ── CORS (allow React dev server) ──────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
